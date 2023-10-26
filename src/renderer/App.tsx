@@ -14,11 +14,18 @@ import Button from '../components/Common/Button';
 import Input from '../components/Common/Input';
 
 import './App.css';
+import UserInfoForm from '../components/UserInfoForm';
 
 function Hello() {
+  const [isUserInfoFormOpen, setUserInfoFormOpen] = useState(false);
+
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState<boolean>(false);
+
+  const closeUserInfoForm = () => {
+    setUserInfoFormOpen(true);
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -71,6 +78,7 @@ function Hello() {
 
   return (
     <div>
+      <UserInfoForm isOpen={!isUserInfoFormOpen} onClose={closeUserInfoForm} />
       <div className="body">
         <div className="settings">
           <button
@@ -93,7 +101,6 @@ function Hello() {
           <ul>
             <li>Option 1</li>
             <li>Option 2</li>
-            {/* Ajoutez d'autres options de menu ici */}
           </ul>
         </div>
         <div className="button-container">
@@ -115,7 +122,7 @@ function Hello() {
             onClick={toggleModal}
             label={<img src={settings} alt="settings" />}
           />
-          <Modal isOpen={isModalOpen} onClose={toggleModal}>
+          <Modal isOpen={isModalOpen} onClose={toggleModal} nameButon="Fermer">
             <h2>Paramétres des filtres</h2>
             <Input
               type="text"
@@ -156,6 +163,7 @@ function Hello() {
                     type="button"
                     className="filter-button"
                     onClick={closeAddCategory}
+                    key={title}
                   >
                     {title} <img src={pencil} alt="pencil" />
                   </button>

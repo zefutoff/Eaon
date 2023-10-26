@@ -4,9 +4,10 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  nameButon: string;
 }
 
-function Modal({ isOpen, onClose, children }: ModalProps) {
+function Modal({ isOpen, onClose, children, nameButon }: ModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -14,7 +15,7 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
       <div className="modal">
         {children}
         <button onClick={onClose} type="button">
-          Fermer
+          {nameButon}
         </button>
       </div>
     </div>
