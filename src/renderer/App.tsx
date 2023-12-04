@@ -8,13 +8,13 @@ import cross from '../../assets/icons/cross.svg';
 import redCross from '../../assets/icons/red_cross.svg';
 import coche from '../../assets/icons/green_coche.svg';
 
-import FilterButton from '../components/Buttons/FilterButton';
-import Modal from '../components/Buttons/Modal';
-import Button from '../components/Common/Button';
-import Input from '../components/Common/Input';
+import FilterButton from './components/Buttons/FilterButton';
+import Modal from './components/Buttons/Modal';
+import Button from './components/Common/Button';
+import Input from './components/Common/Input';
 
 import './App.css';
-import UserInfoForm from '../components/UserInfoForm';
+import UserInfoForm from './components/UserInfoForm';
 
 function Hello() {
   const [isUserInfoFormOpen, setUserInfoFormOpen] = useState(false);
