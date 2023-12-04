@@ -12,13 +12,12 @@ import path from 'path';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-// import * as fs from 'fs';
+import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-const fs = require('fs');
-
 let appDir: string;
+let userDataPath: string;
 
 class AppUpdater {
   constructor() {
@@ -71,12 +70,14 @@ const createWindow = async () => {
   const userDir = app.getPath('userData');
   appDir = path.join(userDir, 'Eaon');
 
+  console.log(appDir);
+
   if (!fs.existsSync(appDir)) {
     fs.mkdirSync(appDir, { recursive: true });
   }
 
   // Creation d'un fichier pour stocker les informations utilisateurs
-  const userDataPath = path.join(appDir, 'userInfo.json');
+  userDataPath = path.join(appDir, 'userInfo.json');
 
   if (!fs.existsSync(userDataPath)) {
     const userInfo = [
@@ -98,6 +99,23 @@ const createWindow = async () => {
         );
       },
     );
+  } else {
+    fs.readFile(userDataPath, 'utf-8', (err, fileData) => {
+      if (err) console.log('Erreur de lecture du fichier userInfo.json', err);
+
+      try {
+        const userInfo = JSON.parse(fileData);
+        const isUserInfoComplete = Object.values(userInfo[0]).every(Boolean);
+
+        console.log(isUserInfoComplete);
+
+        if (!isUserInfoComplete) {
+          /* empty */
+        }
+      } catch (errP) {
+        console.error('Erreur de parsing du fichier userInfo.json', errP);
+      }
+    });
   }
 
   mainWindow = new BrowserWindow({
@@ -146,12 +164,37 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
-
 ipcMain.on('save-user-info', (event, data) => {
-  // Traiter les données reçues du formulaire
-  // eslint-disable-next-line no-console
-  console.log('Données reçues depuis le formulaire :', data);
-  // Effectuer le traitement nécessaire ici
+  fs.readFile(userDataPath, 'utf-8', (err, fileData) => {
+    if (err) console.log('Erreur de lecture du fichier userInfo.json', err);
+
+    try {
+      const userInfo = JSON.parse(fileData);
+      // Mise à jour des données avec les nouvelles informations
+      userInfo[0] = { ...userInfo[0], ...data };
+
+      // Écriture des données mises à jour dans le fichier
+      fs.writeFile(
+        userDataPath,
+        JSON.stringify(userInfo, null, 2),
+        'utf-8',
+        (errW) => {
+          if (err) {
+            console.error(
+              "Erreur lors de l'écriture dans le fichier userInfo.json",
+              errW,
+            );
+            return;
+          }
+          console.log(
+            'Données enregistrées avec succès dans le fichier userInfo.json',
+          );
+        },
+      );
+    } catch (errP) {
+      console.error('Erreur de parsing du fichier userInfo.json', errP);
+    }
+  });
 });
 
 app.on('window-all-closed', () => {

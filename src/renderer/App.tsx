@@ -78,7 +78,6 @@ function Hello() {
 
   return (
     <div>
-      <UserInfoForm isOpen={!isUserInfoFormOpen} onClose={closeUserInfoForm} />
       <div className="body">
         <div className="settings">
           <button
