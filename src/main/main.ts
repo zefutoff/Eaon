@@ -9,12 +9,16 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+const fs = require('fs');
+
+let appDir: string;
 
 class AppUpdater {
   constructor() {
@@ -65,12 +69,36 @@ const createWindow = async () => {
   };
 
   const userDir = app.getPath('userData');
-  const appDir = path.join(userDir, 'MonApplication');
+  appDir = path.join(userDir, 'Eaon');
+
   if (!fs.existsSync(appDir)) {
     fs.mkdirSync(appDir, { recursive: true });
   }
 
-  console.log(userDir + appDir);
+  // Creation d'un fichier pour stocker les informations utilisateurs
+  const userDataPath = path.join(appDir, 'userInfo.json');
+
+  if (!fs.existsSync(userDataPath)) {
+    const userInfo = [
+      {
+        firstname: '',
+        birthDate: '',
+        language: '',
+        theme: '',
+      },
+    ];
+    fs.writeFile(
+      userDataPath,
+      JSON.stringify(userInfo, null, 2),
+      'utf-8',
+      (err: any) => {
+        console.error(
+          "Une erreur s'est produite lors de la création du fichier userInfo.json",
+          err,
+        );
+      },
+    );
+  }
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -118,6 +146,13 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
+
+ipcMain.on('save-user-info', (event, data) => {
+  // Traiter les données reçues du formulaire
+  // eslint-disable-next-line no-console
+  console.log('Données reçues depuis le formulaire :', data);
+  // Effectuer le traitement nécessaire ici
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
