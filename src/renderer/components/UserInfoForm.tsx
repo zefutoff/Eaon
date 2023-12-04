@@ -16,8 +16,8 @@ interface UserInfoFormProps {
 const defaultFormValues: FormValues = {
   firstname: '',
   birthDate: '',
-  language: 'Français',
-  theme: '',
+  language: 'Francais',
+  theme: 'false',
 };
 
 function UserInfoForm({ isOpen, onClose }: UserInfoFormProps) {
@@ -40,7 +40,7 @@ function UserInfoForm({ isOpen, onClose }: UserInfoFormProps) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleSubmit} nameButon="Enregistrer">
+    <Modal isOpen={isOpen}>
       <form onSubmit={handleSubmit}>
         <p>Prénom</p>
         <input
@@ -48,6 +48,7 @@ function UserInfoForm({ isOpen, onClose }: UserInfoFormProps) {
           name="firstname"
           value={formValues.firstname}
           onChange={handleInputChange}
+          required
         />
         <p>Date de naissance</p>
         <input
@@ -55,15 +56,17 @@ function UserInfoForm({ isOpen, onClose }: UserInfoFormProps) {
           name="birthDate"
           value={formValues.birthDate}
           onChange={handleInputChange}
+          required
         />
         <p>Langues</p>
         <select
           name="language"
           value={formValues.language}
           onChange={handleInputChange}
+          required
         >
-          <option value="Français">Français</option>
-          <option value="Anglais">Anglais</option>
+          <option value="French">Français</option>
+          <option value="English">Anglais</option>
         </select>
         <p>Thème</p>
         <input
@@ -71,7 +74,9 @@ function UserInfoForm({ isOpen, onClose }: UserInfoFormProps) {
           name="theme"
           value={formValues.theme}
           onChange={handleInputChange}
+          required
         />
+        <button type="submit">Enregistrer</button>
       </form>
     </Modal>
   );

@@ -2,21 +2,21 @@ import React from 'react';
 
 interface ModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  // onClose: () => void;
   children: React.ReactNode;
-  nameButon: string;
+  // nameButon: string;
 }
 
-function Modal({ isOpen, onClose, children, nameButon }: ModalProps) {
+function Modal({ isOpen, children }: ModalProps) {
   if (!isOpen) return null;
 
   return (
     <div className="modal-background">
       <div className="modal">
         {children}
-        <button onClick={onClose} type="button">
+        {/* <button onClick={onClose} type="button">
           {nameButon}
-        </button>
+        </button> */}
       </div>
     </div>
   );
