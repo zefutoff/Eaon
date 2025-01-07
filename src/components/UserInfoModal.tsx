@@ -15,6 +15,7 @@ import {
 import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { BaseDirectory } from "@tauri-apps/api/path";
 import { useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 
 const UserInfoModal = () => {
   const { isOpen, onOpenChange } = useDisclosure({ defaultOpen: true });
@@ -22,12 +23,13 @@ const UserInfoModal = () => {
   const [birthDate, setBirthDate] = useState<CalendarDate | null>(null);
 
   const handleConfirm = async () => {
-    const userInfo = { name, birthDate };
+    const userInfo = JSON.stringify({
+      name,
+      birthDate: birthDate ? birthDate.toString() : "",
+    });
 
     try {
-      await writeTextFile("user-info.txt", JSON.stringify(userInfo), {
-        baseDir: BaseDirectory.AppData, //Renvoi à la racine du dossier Roaming de AppDate de l'utilisateur pas bon aller dans le dossier de l'application
-      });
+      await invoke("save_file", { fileName: "user-info", data: userInfo });
       onOpenChange();
     } catch (error) {
       console.error("Erreur lors de l'enregistrement :", error);
