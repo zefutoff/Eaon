@@ -1,13 +1,7 @@
-use serde::{Deserialize, Serialize};
+use log::info;
 use std::io::Write;
 use std::{fs::File, path::PathBuf};
 use tauri::{AppHandle, Manager};
-
-#[derive(Serialize, Deserialize)]
-struct UserInfo {
-    name: String,
-    birth_date: String,
-}
 
 #[tauri::command]
 fn save_file(app_handle: AppHandle, file_name: String, data: String) -> Result<(), String> {
@@ -16,7 +10,7 @@ fn save_file(app_handle: AppHandle, file_name: String, data: String) -> Result<(
         "Impossible de trouver le répertoire des données de l'application".to_string()
     })?; // Propagation de l'erreur avec un message personnalisé
 
-    let file_path = app_dir.join(file_name);
+    let file_path = app_dir.join(&file_name);
 
     // Ecriture des données dans le fichier
     let mut file =
@@ -24,7 +18,10 @@ fn save_file(app_handle: AppHandle, file_name: String, data: String) -> Result<(
     file.write_all(data.as_bytes())
         .map_err(|e| format!("Erreur écriture : {}", e))?;
 
-    println!("Fichier enregistré à : {:?}", file_path);
+    info!(
+        "Fichier '{}' créé avec succès dans {:?}",
+        &file_name, file_path
+    );
     Ok(())
 }
 
