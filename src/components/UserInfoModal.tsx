@@ -12,27 +12,36 @@ import {
   useDisclosure,
   DateInput,
 } from "@nextui-org/react";
-import { writeTextFile } from "@tauri-apps/plugin-fs";
-import { BaseDirectory } from "@tauri-apps/api/path";
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useEffect, useState } from "react";
+import {
+  getUserInfo,
+  initUserInfoDatabase,
+  saveUserInfo,
+} from "@/lib/db/user-info-store";
 
 const UserInfoModal = () => {
-  const { isOpen, onOpenChange } = useDisclosure({ defaultOpen: true });
+  const { isOpen, onOpenChange, onClose } = useDisclosure({
+    defaultOpen: true,
+  });
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState<CalendarDate | null>(null);
 
   const handleConfirm = async () => {
-    const userInfo = JSON.stringify({
-      name,
-      birthDate: birthDate ? birthDate.toString() : "",
-    });
+    if (!name || !birthDate) return;
+
+    const dateStr = `${birthDate.year}-${String(birthDate.month).padStart(
+      2,
+      "0"
+    )}-${String(birthDate.day).padStart(2, "0")}`;
 
     try {
-      await invoke("save_file", { fileName: "user-info", data: userInfo });
-      onOpenChange();
+      await saveUserInfo(name, dateStr);
+      onClose();
     } catch (error) {
-      console.error("Erreur lors de l'enregistrement :", error);
+      console.error(
+        "Erreur lors de l'enregistrement des informations utilisateur :",
+        error
+      );
     }
   };
 
@@ -40,35 +49,33 @@ const UserInfoModal = () => {
     <>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
-          {
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Bienvenue !
-              </ModalHeader>
-              <ModalBody>
-                <Input
-                  autoFocus
-                  label="Prénom"
-                  placeholder="Entre ton prénom"
-                  variant="bordered"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <DateInput
-                  label="Date de naissance"
-                  value={birthDate}
-                  onChange={(date) => setBirthDate(date)}
-                  defaultValue={parseDate("2002-08-06")}
-                  placeholderValue={new CalendarDate(1995, 11, 6)}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" onPress={handleConfirm}>
-                  C&apos;est parti !
-                </Button>
-              </ModalFooter>
-            </>
-          }
+          <>
+            <ModalHeader className="flex flex-col gap-1">
+              Bienvenue !
+            </ModalHeader>
+            <ModalBody>
+              <Input
+                autoFocus
+                label="Prénom"
+                placeholder="Entre ton prénom"
+                variant="bordered"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <DateInput
+                label="Date de naissance"
+                value={birthDate}
+                onChange={(date) => setBirthDate(date)}
+                defaultValue={parseDate("2002-08-06")}
+                placeholderValue={new CalendarDate(1995, 11, 6)}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onPress={handleConfirm}>
+                C&apos;est parti !
+              </Button>
+            </ModalFooter>
+          </>
         </ModalContent>
       </Modal>
     </>
