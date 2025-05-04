@@ -1,18 +1,34 @@
 "use client";
+
 import { Button } from "@nextui-org/react";
+import { RotateCcw, RefreshCw } from "lucide-react";
 
-interface ReloadButtonProps {
+type AllowedIcons = "RotateCcw" | "RefreshCw";
+const iconMap = {
+  RotateCcw,
+  RefreshCw,
+};
+
+type ReloadButtonProps = {
   className?: string;
-}
+  iconName?: AllowedIcons;
+  title?: string;
+  iconPosition?: "left" | "right";
+};
 
-export default function ReloadButton({ className }: ReloadButtonProps) {
-  const handleReload = () => {
-    window.location.reload();
-  };
+export default function ReloadButton({
+  className = "",
+  iconName = "RotateCcw",
+  title,
+  iconPosition = "left",
+}: ReloadButtonProps) {
+  const Icon = iconMap[iconName];
 
   return (
-    <Button className={className} color="primary" onPress={handleReload}>
-      Recharger
+    <Button onPress={() => window.location.reload()} className={className}>
+      {iconPosition === "left" && Icon && <Icon />}
+      {title && <span>{title}</span>}
+      {iconPosition === "right" && Icon && <Icon />}
     </Button>
   );
 }

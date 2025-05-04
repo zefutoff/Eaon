@@ -3,12 +3,16 @@ import UserNameText from "@/components/UserNameDisplay";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-blue-600">
-      <ReloadButton className="fixed top-4 right-4 z-10" />
+    <div className="relative min-h-screen">
+      <ReloadButton
+        className="fixed top-3 right-0 bg-transparent"
+        iconName="RotateCcw"
+      />
 
-      <div className="pt-16 px-4 text-xl text-white text-center">
+      <div className="p-32 text-6xl text-center">
         <p>
-          Bienvenue dans tes souvenirs <UserNameText /> !
+          Bienvenue dans tes souvenirs{" "}
+          <UserNameText className="font-semibold" /> !
         </p>
       </div>
     </div>

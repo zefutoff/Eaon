@@ -3,7 +3,11 @@
 import { getUserInfo } from "@/lib/db/user";
 import { useEffect, useState } from "react";
 
-export default function UserNameText() {
+interface ReloadButtonProps {
+  className?: string;
+}
+
+export default function UserNameText( {className }: ReloadButtonProps) {
   const [user, setUser] = useState<{ name: string; birthDate: string } | null>(
     null
   );
@@ -14,5 +18,5 @@ export default function UserNameText() {
 
   if (!user) return null;
 
-  return <span>{user.name}</span>;
+  return <span className={className}> {user.name}</span>;
 }
