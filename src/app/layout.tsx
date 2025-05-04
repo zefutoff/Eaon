@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className="h-full w-full flex flex-col items-center"
+        className="h-full w-full"
         //className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextUIProvider>{children}</NextUIProvider>

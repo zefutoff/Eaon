@@ -14,5 +14,5 @@ export default function UserNameText() {
 
   if (!user) return null;
 
-  return <p>Bienvenu dans tes souvenirs {user.name} !</p>;
+  return <span>{user.name}</span>;
 }

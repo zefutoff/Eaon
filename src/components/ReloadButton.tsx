@@ -1,13 +1,17 @@
 "use client";
 import { Button } from "@nextui-org/react";
 
-export default function ReloadButton() {
+interface ReloadButtonProps {
+  className?: string;
+}
+
+export default function ReloadButton({ className }: ReloadButtonProps) {
   const handleReload = () => {
     window.location.reload();
   };
 
   return (
-    <Button className="w-1/2" color="primary" onPress={handleReload}>
+    <Button className={className} color="primary" onPress={handleReload}>
       Recharger
     </Button>
   );
