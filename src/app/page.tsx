@@ -4,10 +4,7 @@ import UserNameText from "@/components/UserNameDisplay";
 export default function Home() {
   return (
     <div className="relative min-h-screen">
-      <ReloadButton
-        className="fixed top-3 right-0 bg-transparent"
-        iconName="RotateCcw"
-      />
+      <ReloadButton className="fixed top-1 right-1" iconName="RotateCcw" />
 
       <div className="p-32 text-6xl text-center">
         <p>
