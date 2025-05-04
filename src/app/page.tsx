@@ -1,9 +1,12 @@
-import UserInfoLoader from "@/components/UserInfoLoader";
+import ReloadButton from "@/components/ReloadButton";
+import UserNameText from "@/components/UserNameDisplay";
 
 export default function Home() {
   return (
-    <div className="items-center w-11/12">
-      <UserInfoLoader />
-    </div>
+    <>
+      <UserNameText />
+
+      <ReloadButton />
+    </>
   );
 }

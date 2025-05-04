@@ -12,12 +12,8 @@ import {
   useDisclosure,
   DateInput,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import {
-  getUserInfo,
-  initUserInfoDatabase,
-  saveUserInfo,
-} from "@/lib/db/user-info-store";
+import { useState } from "react";
+import { saveUserInfo } from "@/lib/db/user-info-store";
 
 const UserInfoModal = () => {
   const { isOpen, onOpenChange, onClose } = useDisclosure({
