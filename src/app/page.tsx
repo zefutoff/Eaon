@@ -1,3 +1,4 @@
+import FilterList from "@/components/filters/FilterList";
 import ReloadButton from "@/components/ReloadButton";
 import UserNameText from "@/components/UserNameDisplay";
 
@@ -9,9 +10,10 @@ export default function Home() {
       <div className="p-32 text-6xl text-center">
         <p>
           Bienvenue dans tes souvenirs{" "}
-          <UserNameText className="font-semibold" /> !
+          <UserNameText className="font-semibold" />
         </p>
       </div>
+      <FilterList />
     </div>
   );
 }

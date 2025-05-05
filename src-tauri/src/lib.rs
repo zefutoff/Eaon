@@ -16,6 +16,20 @@ pub fn run() {
         ",
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 2,
+            description: "create_filters_table",
+            sql: "
+                CREATE TABLE IF NOT EXISTS filters (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    label TEXT NOT NULL,
+                    color TEXT NOT NULL,
+                    icon TEXT,
+                    position INTEGER NOT NULL DEFAULT 0
+                );
+        ",
+            kind: MigrationKind::Up,
+        },
     ];
         tauri::Builder::default()
             .plugin(
