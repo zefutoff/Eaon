@@ -2,17 +2,6 @@ import { getDatabase } from ".";
 
 export type User = { name: string; birthDate: string };
 
-export async function initUserTable() {
-  const db = await getDatabase();
-  await db.execute(`
-        CREATE TABLE IF NOT EXISTS user_info (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            birth_date TEXT NOT NULL
-        )
-    `);
-}
-
 export async function saveUserInfo(user: User) {
   const db = await getDatabase();
   await db.execute(

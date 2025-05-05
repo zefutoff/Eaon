@@ -1,7 +1,27 @@
+use tauri_plugin_sql::{Migration, MigrationKind};
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
-        .plugin(tauri_plugin_sql::Builder::new().build())
+    let migrations = vec![
+        Migration {
+            version: 1,
+            description: "create_user_info_table",
+            sql: "
+            CREATE TABLE IF NOT EXISTS user_info (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                birth_date TEXT NOT NULL
+            );
+            
+        ",
+            kind: MigrationKind::Up,
+        },
+    ];
+        tauri::Builder::default()
+            .plugin(
+                tauri_plugin_sql::Builder::default()
+                .add_migrations("sqlite:user_info.db", migrations)
+                .build())
         .plugin(tauri_plugin_fs::init())
         .setup(|app| {
             if cfg!(debug_assertions) {
