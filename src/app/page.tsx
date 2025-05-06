@@ -1,4 +1,5 @@
 import FilterList from "@/components/filters/FilterList";
+import FloatingMemoryButton from "@/components/memories/FloatingMemoryButton";
 import ReloadButton from "@/components/ReloadButton";
 import UserNameText from "@/components/UserNameDisplay";
 
@@ -14,6 +15,8 @@ export default function Home() {
         </p>
       </div>
       <FilterList />
+
+      <FloatingMemoryButton />
     </div>
   );
 }

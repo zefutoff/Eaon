@@ -30,6 +30,28 @@ pub fn run() {
         ",
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 3,
+            description: "create_memories_and_memory_filters_table",
+            sql: "
+                CREATE TABLE IF NOT EXISTS memories (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    description TEXT,
+                    date TEXT NOT NULL,
+                    image TEXT
+            );
+
+                CREATE TABLE IF NOT EXISTS memory_filters (
+                    memory_id INTEGER NOT NULL,
+                    filter_id INTEGER NOT NULL,
+                    PRIMARY KEY (memory_id, filter_id),
+                    FOREIGN KEY (memory_id) REFERENCES memories(id) ON DELETE CASCADE,
+                    FOREIGN KEY (filter_id) REFERENCES filters(id) ON DELETE CASCADE
+            );
+        ",
+            kind: MigrationKind::Up,
+        }
     ];
         tauri::Builder::default()
             .plugin(
