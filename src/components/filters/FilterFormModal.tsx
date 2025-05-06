@@ -10,7 +10,7 @@ import {
   Input,
 } from "@nextui-org/react";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Filter } from "@/lib/db/filters";
 import { Trash2 } from "lucide-react";
 
@@ -38,9 +38,6 @@ export default function FilterFormModal({
   const [icon, setIcon] = useState("");
   const [position, setPosition] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (initialData) {

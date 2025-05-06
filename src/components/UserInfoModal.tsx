@@ -1,5 +1,6 @@
 "use client";
 
+import { saveUserInfo } from "@/lib/db/user";
 import { CalendarDate, parseDate } from "@internationalized/date";
 import {
   Modal,
@@ -13,7 +14,6 @@ import {
   DateInput,
 } from "@nextui-org/react";
 import { useState } from "react";
-import { saveUserInfo } from "@/lib/db/user-info-store";
 
 const UserInfoModal = () => {
   const { isOpen, onOpenChange, onClose } = useDisclosure({

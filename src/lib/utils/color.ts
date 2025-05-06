@@ -1,4 +1,4 @@
-function hexToRgba(hex: string, alpha: number): string {
+export function hexToRgba(hex: string, alpha: number): string {
   const [r, g, b] = hex
     .replace("#", "")
     .match(/.{1,2}/g)!

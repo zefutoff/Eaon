@@ -2,7 +2,6 @@
 //import localFont from "next/font/local";
 import { NextUIProvider } from "@nextui-org/react";
 import "./globals.css";
-import { useEffect } from "react";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
