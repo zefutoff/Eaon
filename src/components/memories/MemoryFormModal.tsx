@@ -37,6 +37,8 @@ export default function MemoryFormModal({
   const [image, setImage] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<number[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [search, setSearch] = useState("");
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   useEffect(() => {
     if (initilData) {
@@ -69,12 +71,6 @@ export default function MemoryFormModal({
 
     onSave(memory);
     setSubmitted(false);
-  };
-
-  const toogleFilter = (id: number) => {
-    setSelectedFilters((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
-    );
   };
 
   return (
@@ -110,28 +106,113 @@ export default function MemoryFormModal({
                 type="date"
                 onChange={(e) => setImage(e.target.value)}
               />
+              <Input
+                label="Image"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
 
-              <div className="flex flex-wrap gap-2 mt-2">
-                {allFilters.map((filter) => {
-                  const selected = selectedFilters.includes(filter.id);
+              <div className="mt-4">
+                <Input
+                  label="Rechercher un filtre"
+                  placeholder="Tape un mot-clé"
+                  value={search}
+                  onFocus={() => setIsSearchActive(true)}
+                  onBlur={() => setTimeout(() => setIsSearchActive(false), 100)}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="mb-2"
+                />
 
-                  return (
-                    <button
-                      key={filter.id}
-                      className={`px-3 py-1 rounded-full text-sm border ${
-                        selected
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
-                      style={{ borderColor: selected ? filter.color : "#ccc" }}
-                      onClick={() => toogleFilter(filter.id)}
-                      type="button"
-                    >
-                      {filter.icon} {filter.label}
-                    </button>
-                  );
-                })}
+                <div className="relative mt-2 h-0">
+                  <div
+                    className={`absolute w-full z-10 bg-white shadow-lg border border-grey-400 rounded-md max-h-32 overflow-y-auto p-2 flex flex-wrap gap-2 transition-all duration-300 ease-in-out transform ${
+                      isSearchActive
+                        ? "opacity-100 scale-100 pointer-events-auto"
+                        : "opacity-0 scale-95 pointer-events-none"
+                    }`}
+                  >
+                    {allFilters
+                      .filter(
+                        (f) =>
+                          !selectedFilters.includes(f.id) &&
+                          f.label.toLowerCase().includes(search.toLowerCase())
+                      )
+                      .map((filter) => (
+                        <button
+                          key={filter.id}
+                          onClick={() => {
+                            setSelectedFilters([...selectedFilters, filter.id]);
+                            setSearch("");
+                          }}
+                          className="text-sm px-3 py-1 rounded-full border"
+                          style={{
+                            borderColor: filter.color,
+                            color: filter.color,
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.backgroundColor = hexToRgba(
+                              filter.color,
+                              0.1
+                            ))
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.backgroundColor =
+                              "transparent")
+                          }
+                        >
+                          <span className="inline-block max-w-[190px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {filter.icon} {filter.label}
+                          </span>
+                        </button>
+                      ))}
+
+                    {allFilters.filter(
+                      (f) =>
+                        !selectedFilters.includes(f.id) &&
+                        f.label.toLowerCase().includes(search.toLowerCase())
+                    ).length === 0 && (
+                      <div className="text-sm text-gray-400 text-center w-full">
+                        Aucun filtre trouvé
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
+
+              {selectedFilters.length > 0 && (
+                <>
+                  <p className="text-sm text-gray-500 mb-1">
+                    Filtres sélectionnés :
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedFilters.map((id) => {
+                      const filter = allFilters.find((f) => f.id === id);
+                      if (!filter) return null;
+                      return (
+                        <span
+                          key={id}
+                          className="flex items-center text-sm px-3 py-1 rounded-full text-white"
+                          style={{ backgroundColor: filter.color }}
+                        >
+                          <span className="mr-1 inline-block max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {filter.icon} {filter.label}
+                          </span>
+                          <button
+                            onClick={() =>
+                              setSelectedFilters((prev) =>
+                                prev.filter((f) => f !== id)
+                              )
+                            }
+                            className="ml-1 text-white hover:text-gray-200 font-bold"
+                          >
+                            x
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </ModalBody>
             <ModalFooter className="justify-between">
               {initilData && onDelete && (
