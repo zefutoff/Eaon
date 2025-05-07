@@ -1,5 +1,6 @@
 import { Filter } from "@/lib/db/filters";
 import { Memory } from "@/lib/db/memories";
+import { hexToRgba } from "@/lib/utils/color";
 import {
   Button,
   Input,

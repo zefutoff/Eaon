@@ -1,6 +1,7 @@
 "use client";
 
 import { Filter } from "@/lib/db/filters";
+import { hexToRgba } from "@/lib/utils/color";
 
 type FilterButtonProps = {
   filter: Filter;
